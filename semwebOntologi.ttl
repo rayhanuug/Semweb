@@ -1,0 +1,155 @@
+@prefix ex: <http://example.org/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix voc: <https://swapi.co/vocabulary/> .
+
+# Linking to External Ontologies
+<http://example.org/ontology> rdf:type owl:Ontology ;
+              owl:imports <https://raw.githubusercontent.com/rayhanuug/Semweb/refs/heads/main/movies.ttl> ;
+              owl:imports <https://raw.githubusercontent.com/rayhanuug/Semweb/refs/heads/main/starwars.ttl> .
+
+# Ontology
+ex:Character rdf:type owl:Class .
+ex:Actor rdf:type owl:Class .
+ex:Director rdf:type owl:Class .
+ex:Genre rdf:type owl:Class .
+
+# Properties
+ex:starredIn rdf:type owl:ObjectProperty ;
+             rdfs:domain ex:Actor ;
+             rdfs:range voc:Film .
+
+ex:directedBy rdf:type owl:ObjectProperty ;
+              rdfs:domain voc:Film ;
+              rdfs:range ex:Director .
+
+ex:hasGenre rdf:type owl:ObjectProperty ;
+            rdfs:domain voc:Film ;
+            rdfs:range ex:Genre .
+
+ex:plays rdf:type owl:ObjectProperty ;
+         rdfs:domain ex:Actor ;
+         rdfs:range ex:Character .
+
+# Restriction: Each Actor Can Play Only One Character
+ex:ActorWithSingleRole rdf:type owl:Class ;
+    owl:intersectionOf (
+        ex:Actor
+        [ rdf:type owl:Restriction ;
+          owl:onProperty ex:plays ;
+          owl:maxCardinality "1"^^xsd:nonNegativeInteger ]
+    ) .
+
+# Example Individuals
+ex:SciFi rdf:type ex:Genre .
+
+<https://swapi.co/resource/film/1> 
+    ex:hasGenre ex:Sci-Fi ; 
+    ex:directedBy ex:GeorgeLucas ; 
+    ex:hasActor ex:MarkHamill , ex:HarrisonFord , ex:CarrieFisher ; 
+    ex:releaseYear "1977"^^xsd:gYear . 
+ 
+<https://swapi.co/resource/film/2> 
+    ex:hasGenre ex:Sci-Fi ; 
+    ex:directedBy ex:IrvinKershner ; 
+    ex:hasActor ex:MarkHamill , ex:HarrisonFord , ex:CarrieFisher ; 
+    ex:releaseYear "1980"^^xsd:gYear . 
+ 
+<https://swapi.co/resource/film/3> 
+    ex:hasGenre ex:Sci-Fi ; 
+    ex:directedBy ex:RichardMarquand ; 
+    ex:hasActor ex:MarkHamill , ex:HarrisonFord , ex:CarrieFisher ; 
+    ex:releaseYear "1983"^^xsd:gYear . 
+ 
+<https://swapi.co/resource/film/4> 
+    ex:hasGenre ex:Sci-Fi ; 
+    ex:directedBy ex:GeorgeLucas ; 
+    ex:hasActor ex:EwanMcGregor , ex:LiamNeeson, ex:NataliePortman ; 
+    ex:releaseYear "1999"^^xsd:gYear . 
+ 
+<https://swapi.co/resource/film/5> 
+    ex:hasGenre ex:Sci-Fi ; 
+    ex:directedBy ex:GeorgeLucas ; 
+    ex:hasActor ex:HaydenChristensen , ex:NataliePortman, ex:EwanMcGregor ; 
+    ex:releaseYear "2002"^^xsd:gYear . 
+ 
+<https://swapi.co/resource/film/6> 
+    ex:hasGenre ex:Sci-Fi ; 
+    ex:directedBy ex:GeorgeLucas ; 
+    ex:hasActor ex:HaydenChristensen , ex:NataliePortman, ex:EwanMcGregor ; 
+    ex:releaseYear "2005"^^xsd:gYear . 
+ 
+<https://swapi.co/resource/film/7> 
+    ex:hasGenre ex:Sci-Fi ; 
+    ex:directedBy ex:J.J.Abrams ; 
+    ex:hasActor ex:DaisyRidley , ex:JohnBoyega, ex:OscarIsaac ; 
+    ex:releaseYear "2015"^^xsd:gYear . 
+
+ex:AnakinSkywalker rdf:type ex:Character .
+ex:ObiWanKenobi rdf:type ex:Character .
+ex:Yoda rdf:type ex:Character .
+ex:MaceWindu rdf:type ex:Character .
+ex:PadmeAmidala rdf:type ex:Character .
+ex:DarthMaul rdf:type ex:Character .
+ex:CountDooku rdf:type ex:Character .
+ex:QuiGonJinn rdf:type ex:Character .
+
+ex:EwanMcGregor rdf:type ex:Actor, ex:ActorWithSingleRole ;
+                rdfs:label "Ewan McGregor" ; 
+                ex:starredIn <https://swapi.co/resource/film/1> , <https://swapi.co/resource/film/2>, <https://swapi.co/resource/film/3> ;
+                ex:plays ex:ObiWanKenobi .
+
+ex:NataliePortman rdf:type ex:Actor, ex:ActorWithSingleRole ;
+                  rdfs:label "Natalie Portman" ; 
+                  ex:starredIn <https://swapi.co/resource/film/1> , <https://swapi.co/resource/film/2>, <https://swapi.co/resource/film/3> ;
+                  ex:plays ex:PadmeAmidala .
+
+ex:LiamNeeson rdf:type ex:Actor, ex:ActorWithSingleRole ;
+              rdfs:label "Liam Neeson" ; 
+              ex:starredIn <https://swapi.co/resource/film/1>  ;
+              ex:plays ex:QuiGonJinn .
+
+ex:HaydenChristensen rdf:type ex:Actor, ex:ActorWithSingleRole ;
+                     rdfs:label "Hayden Christensen" ; 
+                     ex:starredIn <https://swapi.co/resource/film/1>, <https://swapi.co/resource/film/2> ;
+                     ex:plays ex:AnakinSkywalker .
+
+ex:SamuelLJackson rdf:type ex:Actor, ex:ActorWithSingleRole ;
+                  rdfs:label "Samuel L Jackson" ; 
+                  ex:starredIn <https://swapi.co/resource/film/1>, <https://swapi.co/resource/film/2>, <https://swapi.co/resource/film/3> ;
+                  ex:plays ex:MaceWindu .
+
+ex:IanMcDiarmid rdf:type ex:Actor, ex:ActorWithSingleRole ;
+                rdfs:label "Ian Mc Diarmid" ; 
+                ex:starredIn <https://swapi.co/resource/film/1>, <https://swapi.co/resource/film/2>, <https://swapi.co/resource/film/3> ;
+                ex:plays ex:CountDooku .
+
+ex:RayPark rdf:type ex:Actor, ex:ActorWithSingleRole ;
+           rdfs:label "Ray Park" ; 
+           ex:starredIn <https://swapi.co/resource/film/1>  ;
+           ex:plays ex:DarthMaul .
+
+ex:FrankOz rdf:type ex:Actor, ex:ActorWithSingleRole ;
+           rdfs:label "Ewan McGregor" ; 
+           ex:starredIn <https://swapi.co/resource/film/1> , <https://swapi.co/resource/film/2>, <https://swapi.co/resource/film/3> ;
+           ex:plays ex:Yoda .
+
+ex:GeorgeLucas rdf:type ex:Director .
+
+# Connecting with Star Wars Ontology
+ex:Yoda rdf:type voc:Species ;
+        voc:Species voc:Reptilian .
+
+ex:Chewbacca rdf:type voc:Species ;
+             voc:Species voc:Mammal .
+
+ex:JabbaTheHutt rdf:type voc:Species ;
+               voc:Species voc:Gastropod .
+
+ex:GeneralGrievous rdf:type voc:Species ;
+                  voc:Species voc:Artificial .
+
+ex:Watto rdf:type voc:Species ;
+        voc:Species voc:Insectoid .
